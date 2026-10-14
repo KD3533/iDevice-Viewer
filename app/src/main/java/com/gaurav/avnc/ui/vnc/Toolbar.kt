@@ -75,6 +75,8 @@ class Toolbar(private val activity: VncActivity) {
         binding.zoomLockBtn.setOnCheckedChangeListener { _, checked -> toggleZoomLock(checked); close() }
         binding.zoomSaveBtn.setOnClickListener { saveZoom(); close() }
         binding.virtualKeysBtn.setOnClickListener { activity.virtualKeys.show(true); close() }
+        binding.ipodShutdownBtn.setOnClickListener { activity.shutdownIPod() }
+        binding.ipodShutdownBtn.setOnLongClickListener { Toast.makeText(activity, R.string.ipod_shutdown, Toast.LENGTH_SHORT).show(); true }
 
         // Root view is transparent. Click on it should work just like a click in scrim area
         drawerView.setOnClickListener { close() }

@@ -11,7 +11,7 @@
     app:title="@string/pref_viewer">
 
     <ListPreference
-        android:defaultValue="auto"
+        android:defaultValue="portrait"
         android:entries="@array/orientation_entries"
         android:entryValues="@array/orientation_values"
         android:key="viewer_orientation"

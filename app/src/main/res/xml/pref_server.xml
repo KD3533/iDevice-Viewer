@@ -22,7 +22,7 @@
         app:title="@string/pref_saved_server_lock" />
 
     <SwitchPreference
-        app:defaultValue="false"
+        app:defaultValue="true"
         app:key="auto_reconnect"
         app:title="@string/pref_auto_reconnect" />
 

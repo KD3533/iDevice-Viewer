@@ -170,6 +170,40 @@ class Dispatcher(private val activity: VncActivity) {
     fun onCapturedMouseMove(dx: Float, dy: Float) = relativeMode.doMovePointer(dx, dy, false)
     fun onCapturedMouseScroll(hs: Float, vs: Float) = relativeMode.doRemoteScrollFromMouse(PointF(), hs, vs)
 
+    /**
+     * Direct touch (iPod): the finger is the touchscreen. Down, move and up go
+     * straight to the server as left-button press, drag and release, so a tap
+     * lasts as long as the finger is down and nothing waits for gesture detection.
+     */
+    private var directTouching = false
+    private var lastDirectTouch = PointF()
+
+    fun onDirectTouchDown(p: PointF) {
+        if (viewModel.frameState.toFb(p) == null)
+            return
+        directTouching = true
+        lastDirectTouch = PointF(p.x, p.y)
+        directMode.doButtonDown(PointerButton.Left, p)
+    }
+
+    fun onDirectTouchMove(p: PointF) {
+        if (!directTouching)
+            return
+        // Outside the frame, keep the touch at the last point inside it
+        if (viewModel.frameState.toFb(p) != null)
+            lastDirectTouch = PointF(p.x, p.y)
+        directMode.doButtonDown(PointerButton.Left, lastDirectTouch)
+    }
+
+    fun onDirectTouchUp(p: PointF) {
+        if (!directTouching)
+            return
+        if (viewModel.frameState.toFb(p) != null)
+            lastDirectTouch = PointF(p.x, p.y)
+        directMode.doButtonUp(PointerButton.Left, lastDirectTouch)
+        directTouching = false
+    }
+
     fun onStylusTap(p: PointF) = directMode.doClick(PointerButton.Left, p)
     fun onStylusDoubleTap(p: PointF) = directMode.doDoubleClick(PointerButton.Left, p)
     fun onStylusLongPress(p: PointF) = directMode.doClick(PointerButton.Right, p)

@@ -227,6 +227,21 @@ class VncClient(private val observer: Observer) {
 
 
     /**
+     * Whether the server takes the device's accelerometer (qemu-ios only).
+     */
+    val acceptsAccelerometer get() = connected && nativeIsAccelerometerSupported(nativePtr)
+
+    /**
+     * Sends an accelerometer reading to qemu-ios.
+     *
+     * @param x, y, z  Acceleration in milli-g along the emulated device's axes,
+     *                 as iOS reports it (held upright: y = -1000)
+     */
+    fun sendAccelerometer(x: Int, y: Int, z: Int) = ifConnectedAndInteractive {
+        nativeSendAccelerometer(nativePtr, x, y, z)
+    }
+
+    /**
      * Sends text to remote desktop's clipboard.
      */
     fun sendCutText(text: String) = ifConnectedAndInteractive {
@@ -351,6 +366,8 @@ class VncClient(private val observer: Observer) {
     private external fun nativeProcessServerMessage(clientPtr: Long): Boolean
     private external fun nativeSendKeyEvent(clientPtr: Long, keySym: Int, xtCode: Int, isDown: Boolean): Boolean
     private external fun nativeSendPointerEvent(clientPtr: Long, x: Int, y: Int, mask: Int): Boolean
+    private external fun nativeIsAccelerometerSupported(clientPtr: Long): Boolean
+    private external fun nativeSendAccelerometer(clientPtr: Long, x: Int, y: Int, z: Int): Boolean
     private external fun nativeSendCutText(clientPtr: Long, bytes: ByteArray, isUTF8: Boolean): Boolean
     private external fun nativeIsUTF8CutTextSupported(clientPtr: Long): Boolean
     private external fun nativeSetDesktopSize(clientPtr: Long, width: Int, height: Int): Boolean

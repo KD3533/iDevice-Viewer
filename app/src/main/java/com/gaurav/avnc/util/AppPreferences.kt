@@ -30,7 +30,7 @@ class AppPreferences(context: Context) {
     }
 
     inner class Viewer {
-        val orientation; get() = prefs.getString("viewer_orientation", "auto")
+        val orientation; get() = prefs.getString("viewer_orientation", "portrait")
         val fullscreen; get() = prefs.getBoolean("fullscreen_display", true)
         val pipEnabled; get() = prefs.getBoolean("pip_enabled", false)
         val drawBehindCutout; get() = fullscreen && prefs.getBoolean("viewer_draw_behind_cutout", false)
@@ -47,12 +47,14 @@ class AppPreferences(context: Context) {
 
     inner class Gesture {
         val style; get() = prefs.getString("gesture_style", "touchscreen")!!
+        // iPod: pass one finger straight through as the touchscreen (no gesture detection)
+        val directTouch; get() = prefs.getBoolean("gesture_direct_touch", true)
         val tap1 = "left-click" //Preference UI was removed
         val tap2; get() = prefs.getString("gesture_tap2", "open-keyboard")!!
         val tap3; get() = prefs.getString("gesture_tap3", "none")!!
         val doubleTap; get() = prefs.getString("gesture_double_tap", "double-click")!!
-        val longPress; get() = prefs.getString("gesture_long_press", "right-click")!!
-        val swipe1; get() = prefs.getString("gesture_swipe1", "pan")!!
+        val longPress; get() = prefs.getString("gesture_long_press", "left-press")!!
+        val swipe1; get() = prefs.getString("gesture_swipe1", "remote-drag")!!
         val swipe2; get() = prefs.getString("gesture_swipe2", "pan")!!
         val swipe3; get() = prefs.getString("gesture_swipe3", "pan")!!
         val doubleTapSwipe; get() = prefs.getString("gesture_double_tap_swipe", "remote-drag")!!
@@ -76,7 +78,7 @@ class AppPreferences(context: Context) {
         val mousePassthrough; get() = prefs.getBoolean("mouse_passthrough", true)
         val capturePointer; get() = mousePassthrough && prefs.getBoolean("capture_pointer", false)
         val hideLocalCursor; get() = prefs.getBoolean("hide_local_cursor", false)
-        val hideRemoteCursor; get() = prefs.getBoolean("hide_remote_cursor", false)
+        val hideRemoteCursor; get() = prefs.getBoolean("hide_remote_cursor", true)
         val mouseBack; get() = prefs.getString("mouse_back", "right-click")!!
         val interceptMouseBack; get() = mouseBack != "default"
 
@@ -88,7 +90,7 @@ class AppPreferences(context: Context) {
     inner class Server {
         val clipboardSync; get() = prefs.getBoolean("clipboard_sync", true)
         val lockSavedServer; get() = prefs.getBoolean("lock_saved_server", false)
-        val autoReconnect; get() = prefs.getBoolean("auto_reconnect", false)
+        val autoReconnect; get() = prefs.getBoolean("auto_reconnect", true)
         val discoveryAutorun; get() = prefs.getBoolean("discovery_autorun", true)
         val rediscoveryIndicator = BooleanLivePref("rediscovery_indicator", true)
     }
@@ -100,7 +102,7 @@ class AppPreferences(context: Context) {
     inner class RunInfo {
         var hasShownViewerHelp by BooleanPref("run_info_has_shown_viewer_help", false)
         var hasShownV3WelcomeMsg by BooleanPref("run_info_has_shown_v3_welcome_msg", false)
-        var showVirtualKeys by BooleanPref("run_info_show_virtual_keys", true)
+        var showVirtualKeys by BooleanPref("run_info_show_virtual_keys", false)
         var virtualKeysTextBoxVisible by BooleanPref("run_info_virtual_keys_textbox_visible", false)
         var toolbarOpenerBtnVerticalBias by FloatPref("run_info_toolbar_opener_vertical_bias", .5f)
     }

@@ -32,6 +32,10 @@ struct ClientEx {
 
     // Protects modification to framebuffer & cursor
     MUTEX(mutex);
+
+    // The server takes our accelerometer (qemu-ios: it acknowledged the
+    // private encoding). Set on the receiver thread, read by the sender.
+    volatile bool iosAccel;
 };
 
 const int ClientExTag = 1;
@@ -66,6 +70,7 @@ ClientEx *assignClientExtension(rfbClient *client) {
     if (ex) {
         INIT_MUTEX(ex->mutex);
         ex->cursor = nullptr;
+        ex->iosAccel = false;
         setClientExtension(client, ex);
     }
     return ex;

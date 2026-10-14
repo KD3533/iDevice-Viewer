@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ iPod Touch emulator integration.
+  ~
+  ~ SPDX-License-Identifier:  GPL-3.0-or-later
+  -->
+<resources>
+    <string name="ipod_msg_connecting">Connecting to the device…</string>
+    <string name="ipod_msg_starting">Starting the device in Termux…</string>
+    <string name="ipod_msg_no_termux">Termux is not installed.\n\nInstall Termux from F-Droid, then run qemu-ios/scripts/android/setup.sh in it.</string>
+    <string name="ipod_msg_permission_denied">This app needs permission to run commands in Termux to start the device.</string>
+    <string name="ipod_msg_termux_failed">Could not start the device through Termux:\n%1$s\n\nRun setup.sh in Termux and make sure allow-external-apps = true is set in ~/.termux/termux.properties.</string>
+    <string name="ipod_msg_start_timeout">The device did not start.\n\nIn Termux, check: device status and device log (or, for the qemu-ios iPod: ipod status, tail ~/ipod/ipod.log)</string>
+    <string name="ipod_retry">Try again</string>
+    <string name="ipod_advanced">Other VNC servers</string>
+    <string name="ipod_home">Home</string>
+    <string name="ipod_power">Power</string>
+    <string name="ipod_vol_down">Vol −</string>
+    <string name="ipod_vol_up">Vol +</string>
+    <string name="ipod_shutdown">Shut down device</string>
+    <string name="ipod_msg_shutting_down">Shutting down the device…</string>
+</resources>

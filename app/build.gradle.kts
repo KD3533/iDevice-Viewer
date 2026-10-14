@@ -14,7 +14,7 @@ android {
     ndkVersion = "28.2.13676358"
 
     defaultConfig {
-        applicationId = "com.gaurav.avnc"
+        applicationId = "io.github.qemuios.ipodviewer"
         minSdk = 21
         targetSdk = 36
         versionCode = 53
@@ -24,6 +24,11 @@ android {
             annotationProcessorOptions {
                 arguments += "room.schemaLocation" to "$projectDir/roomSchema/"
             }
+        }
+
+        ndk {
+            // the iPod emulator runs in Termux on arm64 phones
+            abiFilters += "arm64-v8a"
         }
 
         externalNativeBuild {
@@ -127,7 +132,6 @@ dependencies {
     implementation("org.connectbot:sshlib:2.2.36")
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 
-    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.14")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test:runner:1.7.0")

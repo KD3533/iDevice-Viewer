@@ -33,7 +33,7 @@
             app:useSimpleSummaryProvider="true" />
 
         <ListPreference
-            app:defaultValue="right-click"
+            app:defaultValue="left-press"
             app:entries="@array/long_press_action_entries"
             app:entryValues="@array/long_press_action_values"
             app:key="gesture_long_press"
@@ -57,7 +57,7 @@
             app:useSimpleSummaryProvider="true" />
 
         <com.gaurav.avnc.ui.prefs.ListPreferenceEx
-            app:defaultValue="pan"
+            app:defaultValue="remote-drag"
             app:entries="@array/swipe1_action_entries"
             app:entryValues="@array/swipe1_action_values"
             app:key="gesture_swipe1"
@@ -134,7 +134,7 @@
             app:title="@string/pref_hide_local_cursor" />
 
         <SwitchPreference
-            app:defaultValue="false"
+            app:defaultValue="true"
             app:key="hide_remote_cursor"
             app:title="@string/title_hide_remote_cursor" />
 

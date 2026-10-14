@@ -49,6 +49,12 @@
                     android:contentDescription="@string/desc_virtual_keys_btn"
                     android:src="@drawable/ic_keyboard_mini" />
 
+                <ImageButton
+                    android:id="@+id/ipod_shutdown_btn"
+                    style="@style/ImageButton"
+                    android:contentDescription="@string/ipod_shutdown"
+                    android:src="@drawable/ic_ipod_shutdown" />
+
                 <ToggleButton
                     android:id="@+id/view_modes_toggle"
                     style="@style/ToolbarFlyoutToggle"

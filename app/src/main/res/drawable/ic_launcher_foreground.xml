@@ -1,9 +1,8 @@
-<!--
-  ~ Copyright (c) 2021  Gaurav Ujjwal.
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ iDevice launcher icon: a small lowercase "i" (dot and stem), inside the
+  ~ adaptive icon's 66 dp safe zone.
   ~
   ~ SPDX-License-Identifier:  GPL-3.0-or-later
-  ~
-  ~ See COPYING.txt for more details.
   -->
 
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
@@ -11,36 +10,12 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <group
-        android:scaleX="0.5625"
-        android:scaleY="0.5625">
-        <path
-            android:fillColor="#00000000"
-            android:pathData="M76.149,73.388 L98.058,118.702"
-            android:strokeWidth="12.2257"
-            android:strokeColor="#e0b609"
-            android:strokeLineCap="round"
-            android:strokeLineJoin="round" />
-        <path
-            android:fillColor="#00000000"
-            android:pathData="M53.313,118.702 L76.149,73.388"
-            android:strokeWidth="12.2257"
-            android:strokeColor="#ffce00"
-            android:strokeLineCap="round"
-            android:strokeLineJoin="round" />
-        <path
-            android:fillColor="#00000000"
-            android:pathData="m138.69,73.295 l-22.41,45.32"
-            android:strokeWidth="12.2194"
-            android:strokeColor="#00c21d"
-            android:strokeLineCap="round"
-            android:strokeLineJoin="round" />
-        <path
-            android:fillColor="#00000000"
-            android:pathData="M116.28,118.615 L93.939,73.295"
-            android:strokeWidth="12.2194"
-            android:strokeColor="#00e524"
-            android:strokeLineCap="round"
-            android:strokeLineJoin="round" />
-    </group>
+    <!-- the dot -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M54,32 a6,6 0 1,1 0,12 a6,6 0 1,1 0,-12 z" />
+    <!-- the stem -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M48.5,54.5 a5.5,5.5 0 0,1 11,0 v14 a5.5,5.5 0 0,1 -11,0 z" />
 </vector>

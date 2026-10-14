@@ -23,6 +23,7 @@ import androidx.core.view.WindowInsetsCompat.Type
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
+import com.gaurav.avnc.R
 import com.gaurav.avnc.util.addOnGlobalLayoutListener
 import kotlin.math.max
 
@@ -70,7 +71,9 @@ class LayoutManager(private val activity: VncActivity) {
 
     private fun hookGlobalLayoutListener() {
         addOnGlobalLayoutListener(activity, rootView) {
-            viewModel.frameState.setWindowSize(rootView.width.toFloat(), rootView.height.toFloat())
+            // The iPod button bar takes the bottom: size the frame for the space above it
+            val ipodBar = rootView.findViewById<View>(R.id.ipod_buttons)?.height ?: 0
+            viewModel.frameState.setWindowSize(rootView.width.toFloat(), (rootView.height - ipodBar).toFloat())
             viewModel.frameState.setViewportSize(frameView.width.toFloat(), frameView.height.toFloat())
             activity.virtualKeys.container?.let { updateVirtualKeyInsets(it) }
 

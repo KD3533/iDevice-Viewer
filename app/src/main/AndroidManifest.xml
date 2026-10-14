@@ -12,6 +12,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
 
+    <!-- start/stop the iPod emulator ("ipod" command) in Termux -->
+    <uses-permission android:name="com.termux.permission.RUN_COMMAND" />
+
+    <queries>
+        <package android:name="com.termux" />
+    </queries>
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -25,15 +32,15 @@
         android:supportsRtl="true"
         android:theme="@style/App.Theme">
 
-        <activity-alias
-            android:name=".StartupActivity"
+        <activity
+            android:name=".ipod.IPodActivity"
             android:exported="true"
-            android:targetActivity=".ui.home.HomeActivity">
+            android:theme="@style/App.Theme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity-alias>
+        </activity>
 
         <activity-alias
             android:name=".UriReceiverActivity"

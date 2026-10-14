@@ -44,9 +44,47 @@ class TouchHandler(private val inputView: View, private val dispatcher: Dispatch
      ****************************************************************************************/
 
     fun onTouchEvent(event: MotionEvent): Boolean {
+        if (directTouch && handleDirectTouch(event))
+            return true
+
         val handled = handleStylusEvent(event) || handleMouseEvent(event) || handleGestureEvent(event)
         handleGestureStartStop(event)
         return handled
+    }
+
+    /****************************************************************************************
+     * Direct touch (iPod): one finger is passed through as the touchscreen.
+     * A second finger ends that touch and pinches to zoom instead.
+     ****************************************************************************************/
+    private val directTouch = pref.input.gesture.directTouch
+    private var directTouchActive = false
+
+    private fun handleDirectTouch(e: MotionEvent): Boolean {
+        if (e.getToolType(0) != MotionEvent.TOOL_TYPE_FINGER)
+            return false
+
+        if (e.pointerCount > 1) {
+            if (directTouchActive) {
+                dispatcher.onDirectTouchUp(e.point())
+                directTouchActive = false
+            }
+            scaleDetector.onTouchEvent(e)
+            return true
+        }
+
+        when (e.actionMasked) {
+            MotionEvent.ACTION_DOWN -> {
+                dispatcher.onDirectTouchDown(e.point())
+                directTouchActive = true
+            }
+            MotionEvent.ACTION_MOVE -> if (directTouchActive) dispatcher.onDirectTouchMove(e.point())
+            MotionEvent.ACTION_UP,
+            MotionEvent.ACTION_CANCEL -> if (directTouchActive) {
+                dispatcher.onDirectTouchUp(e.point())
+                directTouchActive = false
+            }
+        }
+        return true
     }
 
     fun onGenericMotionEvent(event: MotionEvent): Boolean {

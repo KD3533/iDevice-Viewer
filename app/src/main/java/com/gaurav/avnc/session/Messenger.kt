@@ -84,6 +84,10 @@ class Messenger(private val client: VncClient) {
         return execute { client.sendKeyEvent(keySym, xtCode, isDown) }
     }
 
+    fun sendAccelerometer(x: Int, y: Int, z: Int): Boolean {
+        return execute { client.sendAccelerometer(x, y, z) }
+    }
+
     fun insertButtonUpDelay() {
         execute { runCatching { Thread.sleep(200) } }
     }

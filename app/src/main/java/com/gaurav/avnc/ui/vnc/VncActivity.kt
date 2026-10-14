@@ -34,6 +34,8 @@ import com.gaurav.avnc.R
 import com.gaurav.avnc.databinding.ActivityVncBinding
 import com.gaurav.avnc.databinding.NoVideoOverlayBinding
 import com.gaurav.avnc.databinding.ViewerHelpBinding
+import com.gaurav.avnc.ipod.IPod
+import com.gaurav.avnc.ipod.IPodAccelerometer
 import com.gaurav.avnc.ui.vnc.input.InputHandler
 import com.gaurav.avnc.util.DeviceAuthPrompt
 import com.gaurav.avnc.util.EdgeToEdgeHelper
@@ -75,6 +77,7 @@ class VncActivity : AppCompatActivity() {
     val toolbar by lazy { Toolbar(this) }
     private val serverUnlockPrompt = DeviceAuthPrompt(this)
     private val layoutManager by lazy { LayoutManager(this) }
+    private val accelerometer by lazy { IPodAccelerometer(this, { viewModel.client }, { viewModel.messenger }) }
     private var oldState: SavedState? = null
     private var hasActivityRestarted = false
     private var hasConnectedSuccessfully = false
@@ -102,6 +105,7 @@ class VncActivity : AppCompatActivity() {
 
         setupLayout()
         setupNoVideoOverlay()
+        setupIPodButtons()
 
         //Observers
         binding.reconnectBtn.setOnClickListener { reconnect() }
@@ -120,6 +124,7 @@ class VncActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         binding.frameView.onResume()
+        accelerometer.start()
         onStartTime = SystemClock.uptimeMillis()
 
         // Refresh framebuffer on activity restart:
@@ -136,6 +141,7 @@ class VncActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         virtualKeys.releaseMetaKeys()
+        accelerometer.stop()
         binding.frameView.onPause()
         if (viewModel.pref.viewer.pauseUpdatesInBackground)
             viewModel.setFrameBufferUpdatesPaused(true)
@@ -375,6 +381,25 @@ class VncActivity : AppCompatActivity() {
 
         if (Build.VERSION.SDK_INT >= 26 && isInPictureInPictureMode) {
             viewModel.inPiPMode.value = true
+        }
+    }
+
+    private fun setupIPodButtons() {
+        val root = binding.root
+        IPod.bindButton(root.findViewById(R.id.ipod_home_btn), IPod.Button.Home) { viewModel.messenger }
+        IPod.bindButton(root.findViewById(R.id.ipod_power_btn), IPod.Button.Power) { viewModel.messenger }
+        IPod.bindButton(root.findViewById(R.id.ipod_vol_down_btn), IPod.Button.VolumeDown) { viewModel.messenger }
+        IPod.bindButton(root.findViewById(R.id.ipod_vol_up_btn), IPod.Button.VolumeUp) { viewModel.messenger }
+    }
+
+    fun shutdownIPod() {
+        try {
+            IPod.runCommand(this, "stop")
+            Toast.makeText(this, R.string.ipod_msg_shutting_down, Toast.LENGTH_SHORT).show()
+            finish()
+        } catch (e: Exception) {
+            Log.e(TAG, "Cannot stop the iPod", e)
+            Toast.makeText(this, getString(R.string.ipod_msg_termux_failed, e.message ?: e.toString()), Toast.LENGTH_LONG).show()
         }
     }
 

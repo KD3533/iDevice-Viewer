@@ -53,13 +53,15 @@
                     android:id="@+id/frame_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/ipod_buttons_height"
                     android:visibility="gone"
                     android:background="@drawable/bg_frame_view" /> <!--Workaround for hole punching issues-->
 
                 <com.gaurav.avnc.ui.vnc.input.InputView
                     android:id="@+id/input_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/ipod_buttons_height" />
 
                 <ViewStub
                     android:id="@+id/no_video_overlay_stub"
@@ -85,6 +87,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|bottom"
                     android:layout="@layout/virtual_keys" />
+
+                <!--iPod Touch hardware buttons-->
+                <include layout="@layout/ipod_buttons" />
 
             </FrameLayout>
 

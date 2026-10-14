@@ -67,6 +67,32 @@ JNI_OnUnload(JavaVM *, void *) {
 }
 
 
+/******************************************************************************
+ * qemu-ios accelerometer
+ *
+ * We offer a private pseudo-encoding; qemu-ios acknowledges it with an empty
+ * rectangle of that encoding when its machine has an accelerometer. Only then
+ * do we send the 8-byte QEMU client message 255, 0x69, then x, y, z as
+ * big-endian int16 milli-g. Other servers ignore the encoding.
+ *****************************************************************************/
+
+static const int IOS_ACCEL_ENCODING = 0x69414363;
+static const uint8_t IOS_ACCEL_SUBMESSAGE = 0x69;
+static int iosAccelEncodings[] = {IOS_ACCEL_ENCODING, 0};
+
+static rfbBool handleIOSAccelEncoding(rfbClient *client, rfbFramebufferUpdateRectHeader *rect) {
+    if (rect->encoding != IOS_ACCEL_ENCODING)
+        return FALSE;
+    auto ex = getClientExtension(client);
+    if (ex)
+        ex->iosAccel = true;
+    return TRUE;
+}
+
+static rfbClientProtocolExtension iosAccelExtension = {
+        iosAccelEncodings, handleIOSAccelEncoding, nullptr, nullptr, nullptr, nullptr
+};
+
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_gaurav_avnc_vnc_VncClient_initLibrary(JNIEnv *env, jclass clazz) {
@@ -79,6 +105,12 @@ Java_com_gaurav_avnc_vnc_VncClient_initLibrary(JNIEnv *env, jclass clazz) {
 
     rfbClientLog = &log_info;
     rfbClientErr = &log_error;
+
+    static bool extensionsRegistered = false;
+    if (!extensionsRegistered) {
+        rfbClientRegisterExtension(&iosAccelExtension);
+        extensionsRegistered = true;
+    }
 }
 
 
@@ -444,6 +476,31 @@ JNIEXPORT jboolean JNICALL
 Java_com_gaurav_avnc_vnc_VncClient_nativeSendPointerEvent(JNIEnv * /*env*/, jobject /*thiz*/, jlong client_ptr,
                                                           jint x, jint y, jint mask) {
     return (jboolean) SendPointerEvent((rfbClient *) client_ptr, x, y, mask);
+}
+
+extern "C"
+JNIEXPORT jboolean JNICALL
+Java_com_gaurav_avnc_vnc_VncClient_nativeIsAccelerometerSupported(JNIEnv * /*env*/, jobject /*thiz*/, jlong client_ptr) {
+    auto ex = getClientExtension((rfbClient *) client_ptr);
+    return (jboolean) (ex && ex->iosAccel);
+}
+
+extern "C"
+JNIEXPORT jboolean JNICALL
+Java_com_gaurav_avnc_vnc_VncClient_nativeSendAccelerometer(JNIEnv * /*env*/, jobject /*thiz*/, jlong client_ptr,
+                                                           jint x, jint y, jint z) {
+    auto client = (rfbClient *) client_ptr;
+    auto ex = getClientExtension(client);
+    if (!ex || !ex->iosAccel)
+        return JNI_FALSE;
+
+    char msg[8] = {(char) 255, (char) IOS_ACCEL_SUBMESSAGE};
+    int16_t v[3] = {(int16_t) x, (int16_t) y, (int16_t) z};
+    for (int i = 0; i < 3; i++) {
+        msg[2 + 2 * i] = (char) ((uint16_t) v[i] >> 8);
+        msg[3 + 2 * i] = (char) (v[i] & 0xff);
+    }
+    return (jboolean) WriteToRFBServer(client, msg, sizeof(msg));
 }
 
 extern "C"

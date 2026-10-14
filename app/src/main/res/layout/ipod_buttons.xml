@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ iPod Touch hardware buttons, shown at the bottom of the viewer.
+  ~
+  ~ SPDX-License-Identifier:  GPL-3.0-or-later
+  -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ipod_buttons"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/ipod_buttons_height"
+    android:gravity="center_vertical"
+    android:layout_gravity="bottom"
+    android:background="#99000000"
+    android:orientation="horizontal"
+    android:padding="@dimen/padding_small">
+
+    <Button
+        android:id="@+id/ipod_vol_down_btn"
+        style="?attr/borderlessButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/ipod_vol_down"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/ipod_home_btn"
+        style="?attr/borderlessButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.5"
+        android:text="@string/ipod_home"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/ipod_power_btn"
+        style="?attr/borderlessButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/ipod_power"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/ipod_vol_up_btn"
+        style="?attr/borderlessButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/ipod_vol_up"
+        android:textColor="#FFFFFF" />
+
+</LinearLayout>
